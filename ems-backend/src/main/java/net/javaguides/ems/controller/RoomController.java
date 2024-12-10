@@ -69,7 +69,7 @@ public class RoomController {
     @PutMapping("/book/{id}/{userId}")
     public ResponseEntity<?> bookRoom(@PathVariable("id") Long roomId, @PathVariable("userId") String userId) {
         // First verify if user exists
-        if (!userService.existsById(userId)) {
+        if (!userService.existsById(Long.valueOf(userId))) {
             return ResponseEntity
                     .badRequest()
                     .body("User ID " + userId + " not found in the database.");

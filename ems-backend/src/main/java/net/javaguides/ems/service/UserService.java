@@ -16,4 +16,6 @@ public interface UserService {
     void deleteUser(long userId);
 
     boolean checkPhoneNumberExists(String phone);
+
+    boolean existsById(Long userId);
 }
