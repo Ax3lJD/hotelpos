@@ -19,25 +19,24 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Name is required")
-    @Column(name = "name")
-    private String name;
+    @Column(name = "name", nullable = false)
+    private String name = "";
 
     @NotBlank(message = "Password is required")
     @Column(name = "password", nullable = false)
-    private String password;
+    private String password = "";
 
     @NotBlank(message = "Email is required")
     @Column(name = "email_id", nullable = false, unique = true)
-    private String email;
+    private String email = "";
 
     @NotBlank(message = "Phone Number is required")
     @Column(name = "phone_number", nullable = false, unique = true)
-    private String phone;
+    private String phone = "";
 
     @Column(name = "role")
-    private String role;
+    private String role = "USER";
 
     @Column(name = "company")
-    private String company;
-
+    private String company = "Not Applicable";
 }

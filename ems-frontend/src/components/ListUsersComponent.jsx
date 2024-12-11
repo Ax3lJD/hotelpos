@@ -47,8 +47,8 @@ const ListUsersComponent = () => {
                 <tr>
                     <th>User Id</th>
                     <th>User Name</th>
-                    <th>User Email</th>
                     <th>Password</th>
+                    <th>User Email</th>
                     <th>Phone Number</th>
                     <th>Role</th>
                     <th>Corporations</th>

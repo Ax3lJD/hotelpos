@@ -66,3 +66,28 @@
 .btn-secondary:hover {
     background-color: #5a6268;
 }
+
+/* New styles for corporate payment */
+.corporate-payment-info {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.corporate-message {
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+.corporate-note {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.corporate-message p {
+    margin: 0.5rem 0;
+}

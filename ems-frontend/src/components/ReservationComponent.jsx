@@ -70,6 +70,10 @@ const ReservationComponent = () => {
         setShowPaymentModal(true);
     };
 
+    const handleUserIdChange = (e) => {
+        setUserId(e.target.value);
+    };
+
     const handlePaymentSubmit = async () => {
         try {
             await makeReservation(roomId, userId, reservationDetails);
@@ -93,12 +97,14 @@ const ReservationComponent = () => {
         <div className="reservation-container">
             <h2>Make a Reservation</h2>
 
-            <div className="room-details">
-                <h3>{room.roomType} - Room {room.roomNumber}</h3>
-                <p>Price: ${room.roomPrice} per night</p>
-                <p>Quality Level: {room.qualityLevel}</p>
-                <p>Bed Type: {room.bedType}</p>
-            </div>
+            {room && (
+                <div className="room-details">
+                    <h3>{room.roomType} - Room {room.roomNumber}</h3>
+                    <p>Price: ${room.roomPrice} per night</p>
+                    <p>Quality Level: {room.qualityLevel}</p>
+                    <p>Bed Type: {room.bedType}</p>
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className="reservation-form">
                 <div className="form-group">
@@ -106,7 +112,7 @@ const ReservationComponent = () => {
                     <input
                         type="text"
                         value={userId}
-                        onChange={(e) => setUserId(e.target.value)}
+                        onChange={handleUserIdChange}
                         required
                         className="form-control"
                     />
@@ -162,10 +168,11 @@ const ReservationComponent = () => {
                 </button>
             </form>
 
-            {showPaymentModal && (
+            {showPaymentModal && room && (
                 <PaymentModal
                     room={room}
                     reservationDetails={reservationDetails}
+                    userId={userId}
                     onClose={() => setShowPaymentModal(false)}
                     onSubmit={handlePaymentSubmit}
                 />
