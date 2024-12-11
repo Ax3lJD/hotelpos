@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { deleteRoom, listRooms } from "../services/RoomService.js";
+import { deleteRoom, listRooms, checkRoomReservations } from "../services/RoomService.js";
 import { useNavigate } from "react-router-dom";
+import WarningModal from './WarningModal';
 
 const ListRoomComponent = () => {
     const [rooms, setRooms] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [hasReservations, setHasReservations] = useState(false);
     const navigator = useNavigate();
 
     useEffect(() => {
@@ -28,14 +32,29 @@ const ListRoomComponent = () => {
         navigator(`/edit-room/${id}`);
     }
 
-    function removeRoom(id) {
-        deleteRoom(id)
-            .then(() => {
-                getAllRooms();
-            })
-            .catch(error => {
-                console.error(error);
-            });
+    async function handleDeleteClick(room) {
+        setSelectedRoom(room);
+        try {
+            const response = await checkRoomReservations(room.id);
+            setHasReservations(response.data.hasReservations);
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error('Error checking reservations:', error);
+        }
+    }
+
+    function confirmDelete() {
+        if (selectedRoom) {
+            deleteRoom(selectedRoom.id)
+                .then(() => {
+                    getAllRooms();
+                    setIsModalOpen(false);
+                    setSelectedRoom(null);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     }
 
     function makeReservation(roomId) {
@@ -108,7 +127,7 @@ const ListRoomComponent = () => {
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() => removeRoom(room.id)}
+                                    onClick={() => handleDeleteClick(room)}
                                     className="px-3 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
                                 >
                                     Delete
@@ -118,6 +137,16 @@ const ListRoomComponent = () => {
                     </div>
                 ))}
             </div>
+
+            <WarningModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setSelectedRoom(null);
+                }}
+                onConfirm={confirmDelete}
+                hasReservations={hasReservations}
+            />
         </div>
     );
 };

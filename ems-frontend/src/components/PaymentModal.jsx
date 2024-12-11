@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCorporation } from '../services/CorporationService';
+import { getUser } from '../services/UserService'; // Update this import to your actual User service path
 import './PaymentModal.css';
 
 const PaymentModal = ({ room, reservationDetails, userId, onClose, onSubmit }) => {
@@ -7,29 +7,26 @@ const PaymentModal = ({ room, reservationDetails, userId, onClose, onSubmit }) =
     const [corporationName, setCorporationName] = useState('');
 
     useEffect(() => {
-        const checkCorporation = async () => {
-            if (userId && userId.toString().startsWith('CORP')) {
-                try {
-                    const response = await getCorporation(userId);
-                    if (response.data && response.data.corporationName) {
-                        setIsCorporate(true);
-                        setCorporationName(response.data.corporationName);
-                    } else {
-                        setIsCorporate(false);
-                        setCorporationName('');
-                    }
-                } catch (error) {
-                    console.error('Error checking corporation:', error);
+        const checkUserCompany = async () => {
+            try {
+                const response = await getUser(userId);
+                if (response.data && response.data.company && response.data.company !== 'Not Applicable') {
+                    setIsCorporate(true);
+                    setCorporationName(response.data.company);
+                } else {
                     setIsCorporate(false);
                     setCorporationName('');
                 }
-            } else {
+            } catch (error) {
+                console.error('Error checking user company:', error);
                 setIsCorporate(false);
                 setCorporationName('');
             }
         };
 
-        checkCorporation();
+        if (userId) {
+            checkUserCompany();
+        }
     }, [userId]);
 
     const calculateTotal = () => {

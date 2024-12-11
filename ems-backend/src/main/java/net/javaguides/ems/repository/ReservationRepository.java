@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findByUserId(Long userId);
+    boolean existsByRoomId(Long roomId);
 
     @Query("SELECT r FROM Reservation r WHERE r.room.id = :roomId AND r.isCanceled = false " +
             "AND ((r.checkInDate BETWEEN :checkIn AND :checkOut) OR " +
@@ -19,4 +20,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("checkIn") LocalDate checkIn,
             @Param("checkOut") LocalDate checkOut
     );
+
 }

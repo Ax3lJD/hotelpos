@@ -1,5 +1,6 @@
 package net.javaguides.ems.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import net.javaguides.ems.dao.RoomDAO;
 import net.javaguides.ems.entity.Room;
@@ -110,11 +111,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    @Transactional
     public void deleteRoom(Long roomId) {
-        if (!roomRepository.existsById(roomId)) {
-            throw new RoomException.RoomNotFoundException("Room not found with id " + roomId);
-        }
-        roomRepository.deleteById(roomId);
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException.RoomNotFoundException("Room not found with id " + roomId));
+
+        roomRepository.delete(room);
     }
 
     @Override

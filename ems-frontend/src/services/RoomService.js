@@ -21,3 +21,7 @@ export const makeReservation = (roomId, userId, reservationDetails) =>
 
 export const cancelReservation = (roomId, userId) =>
     axios.post(`${REST_API_BASE_URL}/${roomId}/cancel/${userId}`);
+
+export const checkRoomReservations = (roomId) => {
+    return axios.get(`${REST_API_BASE_URL}/${roomId}/check-reservations`);
+};

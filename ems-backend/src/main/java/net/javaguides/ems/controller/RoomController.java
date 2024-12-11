@@ -9,7 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import net.javaguides.ems.repository.ReservationRepository;
 
 @CrossOrigin("*")
 @AllArgsConstructor
@@ -18,7 +22,8 @@ import java.util.List;
 public class RoomController {
 
     private RoomService roomService;
-    private UserService userService; // Added to verify user existence
+    private UserService userService;// Added to verify user existence
+    private ReservationRepository reservationRepository;
 
     @PostMapping
     public ResponseEntity<RoomDAO> createRoom(@RequestBody RoomDAO roomDAO) {
@@ -112,5 +117,13 @@ public class RoomController {
                 bedType.equals("full") ||
                 bedType.equals("queen") ||
                 bedType.equals("king");
+    }
+
+    @GetMapping("/{roomId}/check-reservations")
+    public ResponseEntity<Map<String, Boolean>> checkRoomReservations(@PathVariable Long roomId) {
+        boolean hasReservations = reservationRepository.existsByRoomId(roomId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("hasReservations", hasReservations);
+        return ResponseEntity.ok(response);
     }
 }
